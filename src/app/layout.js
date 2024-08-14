@@ -1,5 +1,8 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/Header";
+import { ClerkProvider } from "@clerk/nextjs";
+import { Container } from "postcss";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -10,8 +13,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={`${inter.className} antialiased`}>
+          <main className="max-w-4xl m-auto">
+            <Header />
+            <main>{children}</main>
+          </main>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
