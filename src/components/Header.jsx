@@ -1,4 +1,5 @@
-import { SignedIn, SignedOut } from "@clerk/nextjs";
+"use client";
+import { SignedIn, SignedOut, useUser, SignOutButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,9 +12,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { LogOutIcon } from "lucide-react";
 
 const Header = () => {
+  const { user } = useUser();
+
   return (
     <header className="h-[64px] bg-slate-300 px-4 flex justify-between items-center">
       <Link href="/">
@@ -40,21 +42,20 @@ const Header = () => {
               <DropdownMenuSeparator />
               <DropdownMenuItem className="flex items-center space-x-2">
                 <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarImage src={user?.hasImage ? user.imageUrl : ""} />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
-                <span className="font-medium">Name</span>
+                <span className="font-medium">{user?.fullName}</span>
               </DropdownMenuItem>
               <Separator />
-              <Link
-                href="/"
-                className="flex items-center hover:bg-slate-100 transition-all cursor-pointer"
+              <Button
+                variant="outline"
+                className="flex mt-1 w-full items-center hover:bg-slate-100 transition-all cursor-pointer"
               >
                 <DropdownMenuItem className="space-x-2 cursor-pointer">
-                  <LogOutIcon size="15" />
-                  <span className="font-medium">Logout</span>
+                  <SignOutButton />
                 </DropdownMenuItem>
-              </Link>
+              </Button>
             </DropdownMenuContent>
           </DropdownMenu>
         </SignedIn>
