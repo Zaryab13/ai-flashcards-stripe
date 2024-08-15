@@ -110,7 +110,7 @@ const Generate = () => {
 
     await batch.commit();
     handleClose();
-    router.push(`/flashcards/${name}`);
+    router.push(`/flashcard?id=${name}`);
   };
 
   return (

@@ -21,6 +21,7 @@ export const pricingPlanData = [
       "Unlimited video calls",
       "Standard support",
     ],
+    isPayable: true,
     buttonText: "Upgrade Now",
   },
   {
@@ -34,17 +35,5 @@ export const pricingPlanData = [
       "Premium support",
     ],
     buttonText: "Go Premium",
-  },
-  {
-    plan: "Enterprise",
-    price: "$49.99/month",
-    features: [
-      "1 TB storage",
-      "Unlimited bandwidth",
-      "500 email accounts",
-      "Dedicated video call support",
-      "24/7 enterprise support",
-    ],
-    buttonText: "Contact Sales",
   },
 ];
