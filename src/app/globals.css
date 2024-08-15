@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --text-color: #1e1d1d;
+    --blue-color: #52C3FE;
+    --pink-color: #EC4899;
+    --yellow-color: #F8AD2D;
+    /* --font-poppins-light: ${poppinsLight.styles};
+    --font-poppins-bold: ${poppinsBold.styles}; */
+   
+  }
+
+ .blue-btn{
+  background-color: #fff;
+  border: 1px solid var(--blue-color);
+ }
+ .blue-btn:hover{
+  background-color: var(--blue-color);
+ }
+ .pink-btn{
+  background-color: #fff;
+  border: 1px solid var(--pink-color);
+ }
+ .pink-btn:hover{
+  background-color: var(--pink-color);
+ }
+ .yellow-btn{
+  background-color: #fff;
+  border: 1px solid var(--yellow-color);
+ }
+ .yellow-btn:hover{
+  background-color: var(--yellow-color);
+ }
