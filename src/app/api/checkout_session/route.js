@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
@@ -6,6 +7,22 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 
 const formatAmountForStripe = (amount, currency) => {
   return Math.round(amount * 100);
+};
+
+export const GET = async (req) => {
+  const { searchParams } = new URL(req.url);
+  const session_id = searchParams.get("session_id");
+
+  try {
+    const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
+    return NextResponse.json(checkoutSession);
+  } catch (error) {
+    console.error("Error retrieving checkout session:", error);
+    return NextResponse.status(500).json(
+      { error: { message: error.message } },
+      { status: 500 }
+    );
+  }
 };
 
 export const POST = async (req, res) => {
@@ -29,16 +46,16 @@ export const POST = async (req, res) => {
       },
     ],
     success_url: `${req.headers.get(
-      Referer
-    )}result?sessions_id={CHECKOUT_SESSION_ID}`,
+      "Referer"
+    )}result?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${req.headers.get(
-      Referer
-    )}result?session)id-{CHECKOUT_SESSION_ID}`,
+      "Referer"
+    )}result?session_id={CHECKOUT_SESSION_ID}`,
   };
 
   const checkoutSession = await stripe.checkout.sessions.create(params);
 
-  return res.json(checkoutSession, {
+  return NextResponse.json(checkoutSession, {
     status: 200,
   });
 };
