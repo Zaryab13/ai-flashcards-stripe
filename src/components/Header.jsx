@@ -1,5 +1,11 @@
 "use client";
-import { SignedIn, SignedOut, useUser, SignOutButton } from "@clerk/nextjs";
+import {
+  SignedIn,
+  SignedOut,
+  useUser,
+  SignOutButton,
+  useAuth,
+} from "@clerk/nextjs";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,9 +18,22 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const Header = () => {
   const { user } = useUser();
+
+  const { isLoaded, isSignedIn } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      setTimeout(() => {
+        router.push("/generate");
+      }, 1000);
+    }
+  }, [isLoaded, isSignedIn, router]);
 
   return (
     <header className="h-[64px] bg-slate-300 px-4 flex justify-between items-center">

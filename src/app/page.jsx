@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Flashcards Saas</title>
+        <title>Flashcareds Saas</title>
         <meta
           name="description"
           content="Generated flashcards from your text"
