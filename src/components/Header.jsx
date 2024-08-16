@@ -15,56 +15,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 
 const Header = () => {
-<<<<<<< Updated upstream
-  const { user } = useUser();
+	const { user } = useUser();
 
-  return (
-    <header className="h-[64px] bg-slate-300 px-4 flex justify-between items-center">
-      <Link href="/">
-        <h6>Logo</h6>
-      </Link>
-      <nav>
-        <SignedOut>
-          <div className="flex space-x-2">
-            <Button variant="outline" asChild>
-              <Link href="/sign-in">Login</Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link href="/sign-up">Signup</Link>
-            </Button>
-          </div>
-        </SignedOut>
-        <SignedIn>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline"> Profile</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 me-2">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="flex items-center space-x-2">
-                <Avatar>
-                  <AvatarImage src={user?.hasImage ? user.imageUrl : ""} />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <span className="font-medium">{user?.fullName}</span>
-              </DropdownMenuItem>
-              <Separator />
-              <Button
-                variant="outline"
-                className="flex mt-1 w-full items-center hover:bg-slate-100 transition-all cursor-pointer"
-              >
-                <DropdownMenuItem className="space-x-2 cursor-pointer">
-                  <SignOutButton />
-                </DropdownMenuItem>
-              </Button>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </SignedIn>
-      </nav>
-    </header>
-  );
-=======
 	return (
 		<header className="h-[64px]  px-4 flex justify-between items-center">
 			<Link href="/">
@@ -116,12 +68,12 @@ const Header = () => {
 							<DropdownMenuSeparator className="my-1 border-t border-gray-200" />
 							<DropdownMenuItem className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 cursor-pointer">
 								<Avatar>
-									<AvatarImage src="https://github.com/shadcn.png" />
+									<AvatarImage src={user?.hasImage ? user.imageUrl : ""} />
 									<AvatarFallback className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600">
 										CN
 									</AvatarFallback>
 								</Avatar>
-								<span className="font-medium">Name</span>
+								<span className="font-medium">{user?.fullName}</span>
 							</DropdownMenuItem>
 							<Separator />
 							<Link
@@ -139,7 +91,6 @@ const Header = () => {
 			</nav>
 		</header>
 	);
->>>>>>> Stashed changes
 };
 
 export default Header;
