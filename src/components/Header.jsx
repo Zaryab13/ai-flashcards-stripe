@@ -43,7 +43,7 @@ const Header = () => {
 	}, [isLoaded, isSignedIn, router]);
 
 	return (
-		<header className="h-[64px]  px-4 flex justify-between items-center">
+		<header className="h-[64px]  px-4 m-5 flex justify-between items-center">
 			<Link href="/">
 				<Image
 					src="/logoMadeEasy.png"
@@ -74,7 +74,7 @@ const Header = () => {
 					</div>
 				</SignedOut>
 				<SignedIn>
-					<div className="hidden md:flex items-center space-x-2">
+					<div className="hidden md:flex items-center m-3 space-x-2">
 						<Button
 							variant="outline"
 							className="text-white bg-sky-500 transition-colors duration-200"
