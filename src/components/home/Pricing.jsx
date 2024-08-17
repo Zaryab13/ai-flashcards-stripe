@@ -47,34 +47,42 @@ const Pricing = () => {
 			<h2 className="text-3xl md:text-5xl font-bold text-center mb-12 md:mb-16 text-slate-800">
 				Pricing
 			</h2>
-			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 px-6  gap-8 w-full max-w-7xl mx-auto">
+			<div className="grid grid-cols-1 sm:grid-cols-2  gap-8 w-full max-w-2xl mx-auto ">
 				{pricingPlanData.map(
 					({ plan, price, features, buttonText, isPayable }, i) => (
 						<div
 							key={i}
-							className="md:p-8 p-6 rounded-xl flex flex-col gap-2 shadow-[4px_4px_10px_rgba(0,0,0,0.08),-4px_-4px_10px_rgba(0,0,0,0.08)] bg-gradient-to-br from-teal-100 to-white min-h-[300px] md:min-h-[400px] transform transition-transform duration-300 hover:scale-105"
-							style={{
-								background: "linear-gradient(135deg, #52C3FE, white)",
-							}}
+							className="px-6 py-8   rounded-xl flex flex-col gap-5 shadow-[4px_4px_10px_rgba(0,0,0,0.08),-4px_-4px_10px_rgba(0,0,0,0.08)] bg-gradient-to-br from-sky-200 to-white min-h-[300px] md:min-h-[400px]  transform transition-transform duration-300 hover:scale-105 overflow-auto"
 						>
-							<div className="mb-1">
-								<h6 className="text-slate-800 font-semibold text-xl  mb-4">
+							<div className="  m-5 ">
+								<h6 className="text-slate-800 font-semibold text-lg md:text-xl  mb-3 ">
 									{plan}
 								</h6>
-								<span className="text-slate-900 font-bold text-3xl">
+								<span className="text-slate-900 font-bold text-2xl md:text-3xl">
 									{price}
 								</span>
 							</div>
-							<Separator className="bg-accent my-8" />
-							<h3 className="text-sm  font-semibold mb-4 ">You can upload:</h3>
-							<div className="ps-4 flex-grow">
+							<Separator className="bg-accent my-3" />
+							<h3 className="text-sm  font-semibold  ps-2 mb-2 ">
+								You can upload:
+							</h3>
+							<div className="ps-4 flex-grow ">
 								<ul className="text-sm text-slate-800 list-disc space-y-2">
 									{features.map((feature, index) => (
-										<li key={index}>{feature}</li>
+										<li key={index} className="break-words">
+											{feature}
+										</li>
 									))}
 								</ul>
 							</div>
-							<Button className="bg-accent/10 mt-2  text-slate-900 font-bold hover:bg-accent hover:border-transparent hover:text-slate-100 transition-all">
+							<Button
+								onClick={() => {
+									if (isPayable) {
+										handleSubmit();
+									}
+								}}
+								className="bg-accent/10 mt-2  text-slate-900 font-bold hover:bg-accent hover:border-transparent hover:text-slate-100 transition-all"
+							>
 								{buttonText}
 							</Button>
 						</div>

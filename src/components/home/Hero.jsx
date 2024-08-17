@@ -3,6 +3,7 @@ import MainHeader from "../ui/MainHeader";
 import { colors } from '@/theme'
 import { poppinsLight, poppinsBold } from '@/theme';
 import '../../app/globals.css';
+import Link from "next/link";
 const Hero = () => {
   return (
     <section className="h-hero flex flex-col items-center justify-center space-y-6">
@@ -20,12 +21,15 @@ const Hero = () => {
       <h5 className="max-w-[40%] text-center `${theme.poppinsLight.className} ">
         Generate and manage Flashcards with ease. Upload your text and <div style={{ color: "#F8AD2D" }}>let the magic happen!</div>
       </h5>
-      <Button
+     <Link href={'/sign-up'}>
+     <Button
         variant="contained"
         className="blue-btn"
       >
         Get Started
       </Button>
+     </Link>
+
     </section>
   );
 };

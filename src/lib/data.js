@@ -23,14 +23,4 @@ export const pricingPlanData = [
 		isPayable: true,
 		buttonText: "Upgrade Now",
 	},
-	{
-		plan: "Premium",
-		price: "$20/month",
-		features: [
-			"Unlimited times",
-			"Unlimited pages per document",
-			"Unlimited size videos (YouTube or your own video)",
-		],
-		buttonText: "Go Premium",
-	},
 ];

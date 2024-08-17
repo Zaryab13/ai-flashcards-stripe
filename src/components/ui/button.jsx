@@ -10,6 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-zinc-900 text-zinc-50 hover:bg-zinc-900/90 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-50/90",
+        default2: "bg-[#F8AD2D] text-white hover:bg-[#F5C069] dark:bg-[#F8AD2D] dark:text-white dark:hover:bg-[#F5C069]",
         destructive:
           "bg-red-500 text-zinc-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-zinc-50 dark:hover:bg-red-900/90",
         outline:
@@ -18,6 +19,9 @@ const buttonVariants = cva(
           "bg-zinc-100 text-zinc-900 hover:bg-zinc-100/80 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-800/80",
         ghost: "hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50",
         link: "text-zinc-900 underline-offset-4 hover:underline dark:text-zinc-50",
+        outline2: "border border-[#52C3FE] text-[#52C3FE] hover:text-white hover:bg-[#52C3FE] hover:border-[#52C3FE]/90 dark:border-[#52C3FE] dark:text-[#52C3FE] dark:hover:border-[#52C3FE]/90",
+        pinkBtn:" text-[#EC4899] mx-2 hover:bg-[#EC4899] hover:text-white dark:hover:bg-[#C73E8B] dark:hover:text-white",
+
       },
       size: {
         default: "h-10 px-4 py-2",
