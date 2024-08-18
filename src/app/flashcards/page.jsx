@@ -49,7 +49,7 @@ const Page = () => {
       </h1>
       {flashcards.length === 0 ? (
         <p className="text-gray-600 text-lg">
-          You haven't created any flashcard collections yet.
+          You haven&apos;t created any flashcard collections yet.
         </p>
       ) : (
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
