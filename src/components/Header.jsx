@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { CircleX } from "lucide-react";
+import { CircleX, LogOut } from "lucide-react";
 
 const Header = () => {
   const { user } = useUser();
@@ -66,6 +66,11 @@ const Header = () => {
               Saved Cards
             </Button>
           </Link>
+          <Button className="absolute bottom-2 left-4 rounded-full" size='icon' variant="outline">
+            <SignOutButton>
+              <LogOut />
+            </SignOutButton>
+          </Button>
         </div>
       </div>
     </div>
