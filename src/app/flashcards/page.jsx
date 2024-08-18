@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import BackButton from "@/components/ui/BackButton";
 
 const Page = () => {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -41,10 +42,15 @@ const Page = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Your Flashcard Collections</h1>
+    <div className="max-w-7xl relative mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <BackButton />
+      <h1 className="text-3xl font-bold text-gray-900 mb-8">
+        Your Flashcards Collections
+      </h1>
       {flashcards.length === 0 ? (
-        <p className="text-gray-600 text-lg">You haven't created any flashcard collections yet.</p>
+        <p className="text-gray-600 text-lg">
+          You haven't created any flashcard collections yet.
+        </p>
       ) : (
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {flashcards.map((card, index) => (
@@ -53,7 +59,7 @@ const Page = () => {
               onClick={() => handleCardClick(card.name)}
               className="cursor-pointer transform transition duration-300 hover:scale-105"
             >
-              <Card className="h-full border-2 border-gray-200 hover:border-[#EC4899] shadow-lg hover:shadow-xl">
+              <Card className="h-full border-2 border-gray-200 hover:border-[#EC4899] shadow-lg hover:shadow-xl overflow-hidden">
                 <CardHeader className="bg-gradient-to-r from-[#EC4899] to-[#F8AD2D]">
                   <CardTitle className="text-white text-xl font-semibold truncate">
                     {card.name}
