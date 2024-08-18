@@ -29,7 +29,7 @@ const Header = () => {
   };
 
   const mobileNav = (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-75 z-50 md:hidden">
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-75 z-[999] md:hidden">
       <div className="fixed top-0 right-0 w-64 bg-white h-full shadow-lg z-50">
         <div className="p-4">
           <Button
@@ -72,7 +72,7 @@ const Header = () => {
   );
 
   return (
-    <header className="h-[64px] border fixed w-full bg-white px-4 py-4 flex justify-between items-center">
+    <header className="h-[64px] border fixed w-full bg-white px-4 py-4 flex justify-between z-10 items-center">
       <Link href="/">
         <Image
           src="/logoMadeEasy.png"
