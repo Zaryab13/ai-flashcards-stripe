@@ -1,8 +1,8 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import { Analytics } from "@vercel/analytics/react";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Container } from "postcss";
 import { Toaster } from "@/components/ui/toaster";
 import Footer from "@/components/home/Footer";
 
@@ -18,6 +18,7 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang="en">
         <body className={`${inter.className} antialiased`}>
+          <Analytics />
           <Toaster />
           <main className=" m-auto overflow-hidden">
             <Header />
