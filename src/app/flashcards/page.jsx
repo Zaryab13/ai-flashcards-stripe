@@ -4,7 +4,7 @@ import { useUser } from "@clerk/nextjs";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { db } from "../../firebase";
-import { useRouter } from "next/navigation"; // Changed from next/router
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -12,8 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import BackButton from "@/components/ui/BackButton";
 
-// Page to showw all the cards saved by the loggedin User
 const Page = () => {
   const { isLoaded, isSignedIn, user } = useUser();
   const [flashcards, setFlashcards] = useState([]);
@@ -42,27 +42,39 @@ const Page = () => {
   };
 
   return (
-    <div className="max-w-full">
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {flashcards.map((card, index) => (
-          <div
-            key={card.id || index}
-            onClick={() => {
-              handleCardClick(card.name);
-            }}
-            className="cursor-pointer"
-          >
-            <Card className="w-full h-full shadow-[0px_2px_8px_rgba(0,0,0,0.08),0px_-2px_8px_rgba(0,0,0,0.08)]">
-              <CardHeader>
-                <CardTitle>{card.name}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription></CardDescription>
-              </CardContent>
-            </Card>
-          </div>
-        ))}
-      </div>
+    <div className="max-w-7xl relative mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <BackButton />
+      <h1 className="text-3xl font-bold text-gray-900 mb-8">
+        Your Flashcards Collections
+      </h1>
+      {flashcards.length === 0 ? (
+        <p className="text-gray-600 text-lg">
+          You haven't created any flashcard collections yet.
+        </p>
+      ) : (
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {flashcards.map((card, index) => (
+            <div
+              key={card.id || index}
+              onClick={() => handleCardClick(card.name)}
+              className="cursor-pointer transform transition duration-300 hover:scale-105"
+            >
+              <Card className="h-full border-2 border-gray-200 hover:border-[#EC4899] shadow-lg hover:shadow-xl overflow-hidden">
+                <CardHeader className="bg-gradient-to-r from-[#EC4899] to-[#F8AD2D]">
+                  <CardTitle className="text-white text-xl font-semibold truncate">
+                    {card.name}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-4">
+                  <CardDescription className="text-gray-600">
+                    Click to view and study this collection
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

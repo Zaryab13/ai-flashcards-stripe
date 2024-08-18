@@ -8,6 +8,7 @@ import { db } from "../../firebase";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Sparkles, Save, LucideSunset, Loader2 } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -25,54 +26,89 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import MainHeader from "@/components/ui/MainHeader";
+import { colors } from "@/theme";
+import { useToast } from "@/components/ui/use-toast";
 
 const Generate = () => {
   const { isLoaded, isSignedIn, user } = useUser();
 
   const [flashcards, setFlashcards] = useState([]);
-  const [flipped, setFlipped] = useState([]);
+  const [flipped, setFlipped] = useState(Array(flashcards.length).fill(false));
   const [text, setText] = useState("");
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent default form submission
+
     if (!text.trim()) {
-      alert("Please enter some text to generate flashcards.");
+      toast({
+        title: "Empty Input",
+        description: "Please enter some text to generate flashcards",
+      });
       return;
     }
-
+    generateFlashcards(text);
+    setText("");
+  };
+  const generateFlashcards = async (inputText) => {
+    setIsGenerating(true);
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
-        body: text,
+        body: inputText,
       });
 
       if (!response.ok) {
-        throw new Error("Failed to generate flashcards");
+        setIsGenerating(false);
+
+        toast({ description: "Failed to generate flashcards" });
       }
 
       const data = await response.json();
+
       setFlashcards(data);
     } catch (error) {
       console.error("Error generating flashcards:", error);
-      alert("An error occurred while generating flashcards. Please try again.");
+      toast({
+        title: "Server Error",
+        description:
+          "An error occurred while generating flashcards. Please try again.",
+      });
     }
-    setText("");
+    setIsGenerating(false);
   };
 
-  const handleCardClick = (id) => {
-    setFlipped((prev) => {
-      return {
-        ...prev,
-        [id]: !prev[id],
-      };
+  const handleCardClick = (index) => {
+    setFlipped((prevState) => {
+      const newFlipped = [...prevState];
+      newFlipped[index] = !newFlipped[index];
+      return newFlipped;
     });
   };
 
+  const handleViewAll = () => {
+    if (!name) {
+      toast({
+        description: "Please save the flashcards first before viewing them.",
+      });
+    } else {
+      router.push(`/flashcard?id=${name}`);
+    }
+  };
+
   const handleOpen = () => {
-    setOpen(true);
+    if (flashcards.length === 0) {
+      toast({
+        description:
+          "Please generate flashcards before attempting to save them.",
+      });
+    } else {
+      setOpen(true);
+    }
   };
 
   const handleClose = () => {
@@ -81,7 +117,9 @@ const Generate = () => {
 
   const saveFlashcards = async () => {
     if (!name) {
-      alert("Please enter a name");
+      toast({
+        description: "Please enter a name",
+      });
       return;
     }
 
@@ -93,7 +131,10 @@ const Generate = () => {
       const collections = docSnap.data().flashcards || [];
 
       if (collections.find((f) => f.name === name)) {
-        alert("A flashcard with this name already exists");
+        toast({
+          title: "Duplication of Name",
+          description: "A flashcard with this name already exists",
+        });
         return;
       } else {
         collections.push({ name });
@@ -113,118 +154,193 @@ const Generate = () => {
     router.push(`/flashcard?id=${name}`);
   };
 
-  return (
-    <section className=" mx-auto max-w-xl">
-      <div className="pt-4 pb-6  flex items-center h-full justify-center flex-col">
-        <MainHeader>Generate Flashcards</MainHeader>
-        <form className="grid w-full gap-2" onSubmit={handleSubmit}>
-          <Label htmlFor="message">Your message</Label>
-          <Textarea
-            id="message"
-            name="message"
-            className="w-full p-3 text-gray-800"
-            rows={10}
-            value={text}
-            placeholder="Type your message here."
-            onChange={(e) => {
-              setText(e.target.value);
-            }}
-          />
-          <Button type="submit">Generate Flashcards</Button>
-        </form>
-      </div>
-      <Button
-        variant="outline"
-        onClick={() => {
-          handleOpen();
-        }}
-      >
-        Save Flashcards
-      </Button>
+  const dummyText = `Sunsets only exist because Earth’s atmosphere acts as a prism for light. In scientific terms, it’s called “scattering”. 
+  Molecules and particles in the atmosphere (which are more numerous at sunset) scatter short-wavelength violet and blue light away from your eyes, so we can see the other colors on the spectrum, like yellow and orange.
 
-      <Dialog open={open}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Save Flashcards</DialogTitle>
-            <DialogDescription>
-              Please enter a name for your flashcards collection
-            </DialogDescription>
-          </DialogHeader>
-          <div className="my-4">
-            <Label htmlFor="collectionName">Collection Name</Label>
-            <Input
-              id="collectionName"
-              value={name}
-              placeholder="Enter the name here"
+  The most remote place in the world is the Tristan da Cunha islands in the Southern Atlantic Ocean. They’re 2,434km from Saint Helena, the nearest inhabited place. Imagine Mum sends you out for groceries but the local supermarket is closed? That’s a long trip.
+  
+  When you do a Google query, 1000 computers are used to find the answer in 0.2 seconds.
+  
+  There are almost 5 billion internet users in the world.
+  
+  The median age of the world’s population is around 30 years, as of 2019.
+  
+  We actually produce enough food to feed everyone on the planet; the problem is distribution.
+  
+  In 2010, Google tried to find out how many books there were in the world. They reckon there are about 130,000,000 of them.
+  
+  A tiger’s roar can be heard up to two miles away.
+  
+  The Earth is 147.2 million kilometers away from the Sun, and it’s about 4.5 billion years old.
+  
+  Owls don’t have eyeballs.`;
+  return (
+    <section className="flex items-center justify-center h-fit md:h-hero w-full">
+      <div className="w-full sm:w-4/5">
+        <div className="py-20 max-w-full flex items-center h-full justify-start flex-col">
+          <MainHeader className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-semibold text-center mb-4 bg-gradient-to-r from-[#EC4899] to-[#52C3FE] text-transparent bg-clip-text">
+            Transform Text into Flash Cards!
+          </MainHeader>
+          <form className="grid w-full gap-2 py-2" onSubmit={handleSubmit}>
+            <Textarea
+              id="message"
+              name="message"
+              className="w-full p-3 text-gray-800"
+              rows={4}
+              value={text}
+              placeholder="Type text to generate flash cards"
               onChange={(e) => {
-                setName(e.target.value);
+                setText(e.target.value);
               }}
             />
-          </div>
-          <DialogFooter className="sm:justify-end">
-            <div className="flex justify-end">
+
+            <div className="flex flex-wrap mt-3 md:flex-row justify-center items-stretch sm:items-center gap-4 md:space-y-0 md:space-x-4">
               <Button
-                type="button"
-                variant="outline"
-                className="hover:bg-gray-200 transition-all"
-                onClick={() => {
-                  handleClose();
+                variant="default2"
+                className="w-[80%] xs:w-fit md:text-lg sm:text-sm md:w-auto rounded-full md:pt-6 md:pb-6  hover:bg-gradient-to-r from-[#EC4899] to-[#52C3FE] transition-all"
+                type="submit"
+                disabled={isGenerating}
+              >
+                {isGenerating ? (
+                  <Loader2 className="size-10 mr-2 animate-spin text-gray-400" />
+                ) : (
+                  "Generate"
+                )}
+                <pre> </pre> <Sparkles className="inline-block w-5 h-5 mr-2" />
+              </Button>
+              <Button
+                variant="outline2"
+                className="w-[80%] xs:w-fit rounded-full md:w-auto md:pt-6 md:pb-6  md:text-base  sm:text-sm "
+                onClick={handleOpen}
+              >
+                Save Flashcards <pre> </pre>{" "}
+                <Save className="inline-block w-5 h-5" />
+              </Button>
+              <Button
+                variant="pinkBtn"
+                className="w-[80%] xs:w-fit rounded-full flex items-center !mx-0 gap-2 md:pt-6 md:pb-6 md:text-base  sm:text-sm border border-[#EC4899]  "
+                onClick={(e) => {
+                  e.preventDefault();
+                  setText(dummyText);
+                  generateFlashcards(dummyText);
                 }}
               >
-                Close
+                Funfacts
+                <LucideSunset className="inline-block w-5 h-5" />
               </Button>
             </div>
-            <div>
-              <Button
-                type="button"
-                className="border border-green-600 bg-transparent text-slate-900 hover:border-transparent hover:bg-green-600 hover:text-white transition-all"
-                onClick={saveFlashcards}
-              >
-                Save
-              </Button>
+          </form>
+        </div>
+
+        <Dialog open={open}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Save Flashcards</DialogTitle>
+              <DialogDescription>
+                Please enter a name for your flashcards collection
+              </DialogDescription>
+            </DialogHeader>
+            <div className="my-4">
+              <Label htmlFor="collectionName">
+                <span style={{ color: colors.colors.yellow }}>
+                  Collection Name
+                </span>
+              </Label>
+              <Input
+                id="collectionName"
+                value={name}
+                placeholder="Enter the name here"
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+              />
             </div>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-      {flashcards.length > 0 && (
-        <div className="py-8">
-          <h5 className="text-xl font-medium mb-6">Flashcards Preview</h5>
-          <div className="grid grid-cols-2 gap-4 py-4">
-            {flashcards.map((flashcard, index) => (
+            <DialogFooter className="sm:justify-end">
+              <div className="flex justify-end">
+                <Button
+                  type="button"
+                  variant="outline2"
+                  className="transition-all"
+                  onClick={handleClose}
+                >
+                  Close
+                </Button>
+              </div>
+              <div>
+                <Button
+                  type="button"
+                  variant="default2"
+                  className="border bg-[#EC4899] bg-transparent text-slate-900 hover:border-transparent hover:bg-[#c6357d] hover:text-white transition-all"
+                  onClick={saveFlashcards}
+                >
+                  Save
+                </Button>
+              </div>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 py-6">
+          {flashcards.slice(0, 2).map((flashcard, index) => (
+            <div
+              key={index}
+              className="flip-card cursor-pointer"
+              onClick={() => handleCardClick(index)}
+            >
               <div
-                key={index}
-                className={`flashcard-styles cursor-pointer ${
-                  flipped[index] ? "flashcard-flipped" : ""
+                className={`flip-card-inner ${
+                  flipped[index] ? "is-flipped" : ""
                 }`}
-                onClick={() => handleCardClick(index)}
               >
-                <div>
-                  <div>
-                    <Card className="w-full h-full shadow-[0px_2px_8px_rgba(0,0,0,0.08),0px_-2px_8px_rgba(0,0,0,0.08)]">
-                      <CardHeader>
-                        <CardTitle>Question</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <CardDescription>{flashcard.front}</CardDescription>
-                      </CardContent>
-                    </Card>
-                  </div>
-                  <div>
-                    <Card className="w-full h-full shadow-[0px_2px_8px_rgba(0,0,0,0.08),0px_-2px_8px_rgba(0,0,0,0.08)]">
-                      <CardHeader>
-                        <CardTitle>Answer</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <CardDescription>{flashcard.back}</CardDescription>
-                      </CardContent>
-                    </Card>
-                  </div>
+                <div className="flip-card-front">
+                  <Card className="w-full h-full bg-gradient-to-br from-[#52C3FE] to-[#EC4899] text-white shadow-lg">
+                    <CardHeader className="h-full flex items-center justify-center">
+                      <CardTitle className="text-xl font-bold text-center flex flex-col items-center gap-2">
+                        Question
+                        <span>Click to Flip</span>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-30">
+                      <p className="text-sm">{flashcard.front}</p>
+                    </CardContent>
+                  </Card>
+                </div>
+                <div className="flip-card-back">
+                  <Card className="w-full h-full bg-gradient-to-br from-[#F8AD2D] to-[#EC4899] text-white shadow-lg">
+                    <CardHeader className="h-full flex items-center justify-center">
+                      <CardTitle className="text-xl font-bold text-center">
+                        Answer
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-30">
+                      <p className="text-sm">{flashcard.back}</p>
+                    </CardContent>
+                  </Card>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
+          {flashcards.length > 0 && (
+            <>
+              <Button
+                variant="default2"
+                onClick={() => {
+                  handleOpen();
+                }}
+              >
+                Save Cards
+              </Button>
+              <Button
+                variant="outline2"
+                onClick={() => {
+                  handleViewAll();
+                }}
+              >
+                View All
+              </Button>
+            </>
+          )}
         </div>
-      )}
+      </div>
     </section>
   );
 };

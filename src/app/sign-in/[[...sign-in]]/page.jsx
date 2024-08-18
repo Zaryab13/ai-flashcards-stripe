@@ -5,7 +5,7 @@ const Page = () => {
   return (
     <section className="flex items-center justify-center flex-col py-8 gap-4">
       <MainHeader>Sign In</MainHeader>
-      <SignIn />
+      <SignIn forceRedirectUrl="/generate" />
     </section>
   );
 };
